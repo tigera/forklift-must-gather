@@ -2,6 +2,9 @@ FROM quay.io/openshift/origin-must-gather:4.22 as builder
 
 FROM registry.access.redhat.com/ubi9-minimal:latest
 
+# BUILD_DATE differs on every build, so declaring it here re-runs the package
+# update rather than reusing a cached layer from an earlier build.
+ARG BUILD_DATE=unknown
 RUN microdnf -y update && \
     microdnf -y install rsync tar gzip jq findutils && \
     microdnf -y clean all
