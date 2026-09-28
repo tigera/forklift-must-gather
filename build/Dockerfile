@@ -1,6 +1,6 @@
-FROM quay.io/openshift/origin-must-gather:4.18 as builder
+FROM quay.io/openshift/origin-must-gather:4.22 as builder
 
-FROM registry.access.redhat.com/ubi9-minimal
+FROM registry.access.redhat.com/ubi9-minimal:latest
 
 RUN microdnf -y install rsync tar gzip jq findutils
 
