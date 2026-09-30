@@ -2,6 +2,7 @@ IMAGE_REGISTRY ?= quay.io
 IMAGE_TAG ?= latest
 IMAGE_NAME ?= kubev2v/forklift-must-gather
 CONTAINER_ENGINE ?= $(shell if [ -e /usr/bin/podman ]; then echo "/usr/bin/podman"; else echo "docker"; fi)
+BUILD_DATE ?= $(shell date -u +'%Y-%m-%dT%H:%M:%SZ')
 
 PROMETHEUS_LOCAL_DATA_DIR ?= /tmp/mig-prometheus-data-dump
 # Search for prom_data.tar.gz archive in must-gather output in currect directory by default
@@ -10,7 +11,7 @@ PROMETHEUS_DUMP_PATH ?= $(shell find ./must-gather.local* -name prom_data.tar.gz
 build: docker-build docker-push
 
 docker-build:
-	${CONTAINER_ENGINE} build -f build/Dockerfile -t ${IMAGE_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} .
+	${CONTAINER_ENGINE} build --build-arg BUILD_DATE=${BUILD_DATE} -f build/Dockerfile -t ${IMAGE_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} .
 
 docker-push:
 	${CONTAINER_ENGINE} push ${IMAGE_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
